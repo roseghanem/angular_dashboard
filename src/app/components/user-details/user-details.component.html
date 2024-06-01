@@ -1,0 +1,6 @@
+<div *ngIf="user">
+  <button mat-button (click)="back()">Back</button>
+  <h2>{{user.first_name}} {{user.last_name}}</h2>
+  <img [src]="user.avatar" alt="{{user.first_name}} {{user.last_name}}">
+  <p>Email: {{user.email}}</p>
+</div>

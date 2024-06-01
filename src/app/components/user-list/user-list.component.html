@@ -1,0 +1,22 @@
+<div *ngIf="loading$ | async" class="loading-indicator">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div *ngIf="!(loading$ | async)" class="d-block w-100">
+  <app-header (search)="search($event)"></app-header>
+</div>
+
+<div *ngIf="!(loading$ | async)" class="user-list">
+  <div *ngFor="let user of filterUsers$ | async" (click)="navigateToUser(user.id)" class="user-card">
+      <mat-card>
+        <mat-card-title>{{ user.first_name }} {{ user.last_name }}</mat-card-title>
+        <mat-card-content>
+          <img [src]="user.avatar" alt="{{ user.first_name }}'s avatar">
+        </mat-card-content>
+      </mat-card>
+  </div>
+  <div>
+    <button mat-button [disabled]="page==1" (click)="previous()">Previous</button>
+    <button mat-button [disabled]="page==2"  (click)="next()">Next</button>
+  </div>
+</div>
