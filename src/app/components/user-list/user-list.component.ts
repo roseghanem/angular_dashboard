@@ -2,11 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { delay, map } from 'rxjs/operators';
 import { LoadUsers } from '../../state/user.actions';
 import { UserState } from '../../state/user.reducer';
 import { selectAllUsers } from '../../state/user.selectors';
-import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
   selector: 'app-user-list',
@@ -16,20 +15,24 @@ import { LoadingService } from 'src/app/services/loading.service';
 export class UserListComponent implements OnInit {
   users$: Observable<any[]>;
   filterUsers$: Observable<any[]>;
-  loading$: Observable<boolean>;  
+  loading: boolean= false;  
   page: number=1;
 
   constructor(
     private store: Store<UserState>,
-     private router: Router,
-     private loadingService: LoadingService) {
+     private router: Router,) {
     this.users$ = this.store.pipe(select(selectAllUsers));
-    this.filterUsers$ = this.users$;
-    this.loading$ = this.loadingService.loading$;  
+    this.filterUsers$ = this.users$;  
   }
 
   ngOnInit(): void {
+   this.loadUsers();
+  }
+
+  loadUsers(){
+    this.loading = true;
     this.store.dispatch(new LoadUsers({ page: this.page }));
+    this.users$.subscribe(()=> this.loading=false);
   }
 
   navigateToUser(id: number): void {
@@ -48,14 +51,14 @@ export class UserListComponent implements OnInit {
   previous(): void {
     if (this.page > 1) {
       this.page--;
-      this.store.dispatch(new LoadUsers({ page: this.page }));
+      this.loadUsers();
     }
   }
 
   next(): void {
     if (this.page < 2) {  // Adjust this condition if there are more pages
       this.page++;
-      this.store.dispatch(new LoadUsers({ page: this.page }));
+      this.loadUsers();
     }
   }
 }

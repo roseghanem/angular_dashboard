@@ -12,7 +12,6 @@ import { HeaderComponent } from './components/header/header.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { UserDetailsComponent } from './components/user-details/user-details.component';
 import { UserService } from './services/user.service';
-import { LoadingService } from './services/loading.service';
 import { userReducer } from './state/user.reducer';
 import { UserEffects } from './state/user.effects';
 import { AppRoutingModule } from './app-routing.module';
@@ -41,7 +40,7 @@ import { HighlightCardDirective } from './directives/highlight-card.directive';
     EffectsModule.forRoot([UserEffects]),
     StoreDevtoolsModule.instrument({ maxAge: 25 })
   ],
-  providers: [UserService, LoadingService],
+  providers: [UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
